@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatic Street Light</title>
+<style>
+body{margin:0;font-family:Arial;background:#07111f;color:white;padding:25px}
+h1{color:#55ddff}
+.card{background:#111f32;padding:20px;margin:15px 0;border:1px solid #29415b;border-radius:15px}
+button{padding:12px 18px;margin:8px;background:#203c57;color:white;border:1px solid #55ddff;border-radius:8px;cursor:pointer}
+button:hover{background:#17617a}
+.lamp{font-size:90px;text-align:center;color:#526174}
+.on{color:#ffe66d;text-shadow:0 0 30px #ffcc00}
+table{width:100%;border-collapse:collapse}
+td,th{padding:10px;border:1px solid #39516c;text-align:center}
+</style>
+</head>
+<body>
+<h1>⚡ AUTOMATIC STREET LIGHT SYSTEM</h1>
+<p>Interactive Digital Logic Project | Verilog Simulation</p>
+
+<div class="card">
+<h2>Live Simulator</h2>
+<p>Darkness Sensor (D): <b id="d">0</b> <button onclick="toggle('D')">Toggle D</button></p>
+<p>Motion Sensor (M): <b id="m">0</b> <button onclick="toggle('M')">Toggle M</button></p>
+<p>Manual Override (O): <b id="o">0</b> <button onclick="toggle('O')">Toggle O</button></p>
+<div id="lamp" class="lamp">💡</div>
+<h2 id="status" style="text-align:center">LIGHT OFF</h2>
+<p id="equation" style="text-align:center">L = O OR (D AND M) = 0</p>
+</div>
+
+<div class="card">
+<h2>Logic Equation</h2>
+<h3>L = O + (D · M)</h3>
+<p>Light ON when manual override is ON, or when darkness and motion are both detected.</p>
+</div>
+
+<div class="card">
+<h2>Truth Table</h2>
+<table>
+<tr><th>D</th><th>M</th><th>O</th><th>L</th></tr>
+<tbody id="truth"></tbody>
+</table>
+</div>
+
+<div class="card">
+<h2>Project Tools</h2>
+<p>HDL: Verilog | Simulator: Icarus Verilog | Waveform Viewer: GTKWave</p>
+<p>Gate design: AND, OR, NOT and NOR logic.</p>
+</div>
+
+<script>
+const state={D:0,M:0,O:0};
+function toggle(k){state[k]=1-state[k];update();}
+function update(){
+document.getElementById('d').textContent=state.D;
+document.getElementById('m').textContent=state.M;
+document.getElementById('o').textContent=state.O;
+const L=state.O|(state.D&state.M);
+document.getElementById('lamp').className=L?'lamp on':'lamp';
+document.getElementById('status').textContent=L?'LIGHT ON':'LIGHT OFF';
+document.getElementById('equation').textContent=`L = ${state.O} OR (${state.D} AND ${state.M}) = ${L}`;
+}
+for(let d=0;d<=1;d++)for(let m=0;m<=1;m++)for(let o=0;o<=1;o++){
+const l=o|(d&m);
+document.getElementById('truth').innerHTML+=`<tr><td>${d}</td><td>${m}</td><td>${o}</td><td>${l}</td></tr>`;
+}
+update();
+</script>
+</body>
+</html>
